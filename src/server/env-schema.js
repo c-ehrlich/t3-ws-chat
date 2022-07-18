@@ -7,6 +7,7 @@ const envSchema = z.object({
   NEXTAUTH_URL: z.string().url(),
   DISCORD_CLIENT_ID: z.string(),
   DISCORD_CLIENT_SECRET: z.string(),
+  NEXT_PUBLIC_WS_URL: z.string().url().or(z.literal('')),
 });
 
 module.exports.envSchema = envSchema;
