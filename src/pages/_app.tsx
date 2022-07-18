@@ -7,7 +7,6 @@ import { SessionProvider } from 'next-auth/react';
 import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
 import { wsLink, createWSClient } from '@trpc/client/links/wsLink';
 import '../styles/globals.css';
-import { env } from '../server/env';
 
 const MyApp: AppType = ({
   Component,
@@ -26,6 +25,8 @@ const getBaseUrl = () => {
   }
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
 
+  if (process.browser) return ''; //browser should use current path
+
   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
 const url = `${getBaseUrl()}/api/trpc`;
@@ -38,8 +39,9 @@ function getEndingLink() {
     });
   }
 
+  console.log('creating ws client');
   const client = createWSClient({
-    url: env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3001',
+    url: process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3001',
   });
 
   return wsLink({
