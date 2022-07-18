@@ -20,6 +20,8 @@ export const createContext = async (
   const req = opts?.req;
   const res = opts?.res;
 
+  // we can't use getServerSession here because we're not on the server
+  // we're in React
   const session = req && res && (await getSession({ req }));
 
   return {
